@@ -3,10 +3,9 @@ require "io/console"
 
 class Editor
   def initialize
-    # Loads lines from file. Currently hardcoded for testfile.txt
-    lines = File.readlines("testfile.txt").map do |line|
-      line.sub(/\n$/, "")
-    end
+    @current_file = ARGV[0]
+    lines = openfile(@current_file) if ARGV.size == 1
+    @file = lines
     @buffer = Buffer.new(lines)
     @cursor = Cursor.new
     @history = []
@@ -39,7 +38,9 @@ class Editor
     char = $stdin.getc
     case char
     # ctrl-q causes the editor to exit
-    when "\C-q" then exit(0)
+    when "\C-q"
+      char = nil
+      quit
     # emacs style commands to move cursor
     when "\C-p" then @cursor = @cursor.up(@buffer)
     when "\C-n" then @cursor = @cursor.down(@buffer)
@@ -80,6 +81,39 @@ class Editor
       @buffer, @cursor = @history.pop
     end
   end
+
+  # Loads lines from file.
+  def openfile(file)
+    lines = File.readlines(file).map do |line|
+      line.sub(/\n$/, "")
+    end
+    return lines
+  end
+
+  def quit
+    save_changes = "y"
+#    puts "Save changes? Y/N"
+#    save_changes = gets.chomp
+#    puts save_changes + "AAAAAAAA"
+#    save_changes.downcase!
+    if ["y", "yes"].include?(save_changes)
+      puts "TODO"
+      #ANSI.clear_screen
+      #ANSI.move_cursor(0, 0)
+      exit(0)
+    elsif ["n", "no"].include?(save_changes)
+      ANSI.clear_screen
+      ANSI.move_cursor(0, 0)
+      exit(0)
+    elsif ["c", "cancel"].include?(save_changes)
+      return
+    else
+      puts "Sorry I didn't understand that command."
+      puts "Please type 'Yes', 'No', or 'Cancel'"
+      quit
+    end
+  end
+
 end
 
 # class to represent contents of file
