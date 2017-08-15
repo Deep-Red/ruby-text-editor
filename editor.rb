@@ -38,9 +38,8 @@ class Editor
     char = $stdin.getc
     case char
     # ctrl-q causes the editor to exit
-    when "\C-q"
-      char = nil
-      quit
+    when "\C-q" then quit
+    when "\C-s" then save_file(@current_file)
     # emacs style commands to move cursor
     when "\C-p" then @cursor = @cursor.up(@buffer)
     when "\C-n" then @cursor = @cursor.down(@buffer)
@@ -90,37 +89,29 @@ class Editor
     return lines
   end
 
-  def quit
-    save_changes = "y"
-#    puts "Save changes? Y/N"
-#    save_changes = gets.chomp
-#    puts save_changes + "AAAAAAAA"
-#    save_changes.downcase!
-    if ["y", "yes"].include?(save_changes)
-      puts "TODO"
-      #ANSI.clear_screen
-      #ANSI.move_cursor(0, 0)
-      exit(0)
-    elsif ["n", "no"].include?(save_changes)
-      ANSI.clear_screen
-      ANSI.move_cursor(0, 0)
-      exit(0)
-    elsif ["c", "cancel"].include?(save_changes)
-      return
-    else
-      puts "Sorry I didn't understand that command."
-      puts "Please type 'Yes', 'No', or 'Cancel'"
-      quit
+  # Saves current buffer to file with specified name
+  def save_file(filename)
+    puts "Saving..."
+    File.open(filename, 'w') do |f|
+      f.puts @buffer.lines
     end
+  end
+
+  def quit
+    ANSI.clear_screen
+    ANSI.move_cursor(0, 0)
+    exit(0)
   end
 
 end
 
 # class to represent contents of file
 class Buffer
+  attr_reader :lines
   # assigns lines to an instance variable
   def initialize(lines)
     @lines = lines
+    lines = lines
   end
 
   def insert(char, row, col)
