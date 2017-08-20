@@ -37,6 +37,8 @@ class Editor
     #get a single character of input
     char = $stdin.getc
     case char
+    # handle escape sequences
+    when "\e" then handle_escape
     # ctrl-q causes the editor to exit
     when "\C-q" then quit
     when "\C-s" then save_file(@current_file)
@@ -68,6 +70,21 @@ class Editor
       @buffer = @buffer.insert(char, @cursor.row, @cursor.col)
       # move cursor to right after inserting character
       @cursor = @cursor.right(@buffer)
+    end
+  end
+
+  # Handle escape
+  def handle_escape    
+    seq = []
+    2.times do
+      seq << $stdin.getc
+    end
+
+    case seq[1]
+    when "A" then @cursor = @cursor.up(@buffer)
+    when "B" then @cursor = @cursor.down(@buffer)
+    when "C" then @cursor = @cursor.right(@buffer)
+    when "D" then @cursor = @cursor.left(@buffer)
     end
   end
 
