@@ -16,6 +16,6 @@ save changes to file
 navigate using arrow keys  
 handle tab insertion (as a set of four spaces)
 
-===
+---
 
 https://www.destroyallsoftware.com/screencasts/catalog/text-editor-from-scratch
