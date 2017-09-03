@@ -5,11 +5,12 @@ class Editor
   def initialize
     if ARGV.size == 1
 		@current_file = ARGV[0]
-		lines = openfile(@current_file) 
+		lines = openfile(@current_file)
 	elsif ARGV.size == 0
 		puts "What would you like to name your new file?"
 		@current_file = gets.chomp
-		lines = File.new(@current_file, "w+")
+		newfile = File.new(@current_file, "w+")
+    lines = openfile(newfile)
 	end
 	@file = lines
     @buffer = Buffer.new(lines)
