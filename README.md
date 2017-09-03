@@ -2,7 +2,7 @@
 A text editor implemented from scratch in Ruby
 
 
-### Able to  
+Able to  
 
 open documents  
 type characters  
