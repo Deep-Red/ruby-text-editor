@@ -3,9 +3,15 @@ require "io/console"
 
 class Editor
   def initialize
-    @current_file = ARGV[0]
-    lines = openfile(@current_file) if ARGV.size == 1
-    @file = lines
+    if ARGV.size == 1
+		@current_file = ARGV[0]
+		lines = openfile(@current_file) 
+	elsif ARGV.size == 0
+		puts "What would you like to name your new file?"
+		@current_file = gets.chomp
+		lines = File.new(@current_file, "w+")
+	end
+	@file = lines
     @buffer = Buffer.new(lines)
     @cursor = Cursor.new
     @history = []
