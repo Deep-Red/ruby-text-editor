@@ -3,7 +3,6 @@ A text editor implemented from scratch in Ruby
 
 
 ### Able to:
----
 open documents
 type characters
 handle backspace
