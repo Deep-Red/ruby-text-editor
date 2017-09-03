@@ -47,6 +47,19 @@ class Editor
     when "\C-n" then @cursor = @cursor.down(@buffer)
     when "\C-b" then @cursor = @cursor.left(@buffer)
     when "\C-f" then @cursor = @cursor.right(@buffer)
+    # handle tab
+    when "\C-I"
+      # would like to eventually implement true tabs, need to figure out how to
+      # tell how many columns a single character tab takes up in order to move
+      # the cursor to the next tab stop
+      # oldlen = @buffer.line_length(@cursor.row)
+      # newlen = @buffer.line_length(@cursor.row)
+      # tabdist = newlen - oldlen
+      # @buffer = @buffer.insert( 9.chr, @cursor.row, @cursor.col)
+      4.times do
+        @buffer = @buffer.insert( 32.chr, @cursor.row, @cursor.col)
+        @cursor = @cursor.right(@buffer)
+      end
     # handle undo
     when "\C-u" then restore_snapshot
     # handle midline break
@@ -74,7 +87,7 @@ class Editor
   end
 
   # Handle escape
-  def handle_escape    
+  def handle_escape
     seq = []
     2.times do
       seq << $stdin.getc
